@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Game of Life!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="content-wrapper">
+
+        <!-- game-board contains all cells! -->
+        <div class="game-board" id="game-board"> 
+            <canvas id="canvas" height="800" width="800"></canvas>
+        </div>
+
+        <!-- game-controls contains control buttons and grid count input form -->
+        <div class="game-controls" id="game-controls">
+            <div class="grid-input">
+                <fieldset>
+                    <label for="grid-count"> Grid Count: </label>
+                    <input type="numeric" id="grid-count" name="grid-count" value=16>
+                </fieldset>
+            </div>
+
+            <!-- start / reset / control buttons -->
+            <button type="button" id="start-btn"> Start </button>
+            <button type="button" id="reset-btn"> Reset </button>
+            <button type="button"> Left Arrow </button>
+            <button type="button"> Right Arrow </button>
+            <button type="button"> Play </button>
+            <button type="button"> Play Speed </button>
+        </div>
+    </div>
+</body>
+<script src="script.js"></script>
+</html>

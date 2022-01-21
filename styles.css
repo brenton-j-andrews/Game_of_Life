@@ -1,0 +1,33 @@
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgrey;
+    padding: 50px;
+}
+
+/* ----------------------------------- game board styling -----------------------------------  */
+.game-board {
+    border: lightslategrey solid 5px;
+    width: 800px;
+    height: 800px;
+    background-color: white;
+}
+
+canvas {
+    background-color: lightgrey;
+}
+
+/* ----------------------------------- game controls styling -----------------------------------  */
+.game-controls {
+    display: flex;
+    background-color: lime;
+    margin: 25px;
+    padding: 25px;
+    gap:10px;
+}
+
+#grid-count {
+    width: 50px;
+}
