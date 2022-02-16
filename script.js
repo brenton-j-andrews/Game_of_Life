@@ -4,7 +4,8 @@ let start_btn = document.getElementById("start-btn");
 let reset_btn = document.getElementById("reset-btn");
 
 
-// Canvas properties.
+// ------------------------------------  Canvas and game array functions / code.
+
 const canvas = document.querySelector("canvas");
 let c = canvas.getContext("2d");
 c.fillStyle = "white";
@@ -19,27 +20,28 @@ let gameArr = []
 
 // Eventlistener function.
 function addColor(event) {
-    mouse.x = event.x - 140;
+    mouse.x = event.x - 155;
     mouse.y = event.y - 65;
 
     for (let i = 0; i < gameArr.length; i++) {
 
         if (gameArr[i].x + 15 > mouse.x && mouse.x > gameArr[i].x) {
             if (gameArr[i].y + 15 > mouse.y && mouse.y > gameArr[i].y) {
-                console.log("Mouse x coord: " + mouse.x);
-                console.log("Mouse y coord: " + mouse.y)
-                console.log("X coord lower bound: " + gameArr[i].x);
-                console.log("X coord upper bound: " + (gameArr[i].x + 16));
-                console.log("Y coord lower bound: " + gameArr[i].y);
-                console.log("Y coord upper bound: " + (gameArr[i].y + 16));
-                gameArr[i].active = true;
+
+                if (!gameArr[i].active) {
+                    gameArr[i].active = true;
+                }
+
+                else {
+                    gameArr[i].active = false;
+                }
+
             }
         }
     }
 
     drawCanvas();
 }
-
 
 // Create game grid, store in gameArr[]
 function CreateGameArr() {
@@ -54,7 +56,6 @@ function CreateGameArr() {
         y_coord += 16;
     }
 }
-
 
 // Create grid square objects.
 function GridSquare(x, y, dx, dy) {
@@ -73,7 +74,6 @@ function GridSquare(x, y, dx, dy) {
     }
 }
 
-
 // Add game grid elements to the canvas.
 function drawCanvas() {
     for (let i = 0; i < gameArr.length; i++) {
@@ -81,8 +81,68 @@ function drawCanvas() {
     }
 }
 
-
 // Window eventListener -> Used to create initial game structure with mouse clicks.
 canvas.addEventListener("click", addColor);
 CreateGameArr();
 drawCanvas();
+
+
+// ------------------------------------  Game logic and button functionality.
+
+start_btn.addEventListener("click", function() {
+    canvas.removeEventListener("click", addColor);
+    gameArr = nextGameState(gameArr);
+    drawCanvas();
+})
+
+
+function nextGameState(gameArr) {
+
+    let nextGameArr = gameArr;
+    for (let i = 0; i < gameArr.length; i++) {
+        let neighbor_count = 0;
+
+        // Highest row.
+        if (gameArr[i-51] != undefined) {
+            if (gameArr[i-51].active) {
+                neighbor_count++;
+            }
+            if (gameArr[i-50].active) {
+                neighbor_count++;
+            }
+            if (gameArr[i-49].active) {
+                neighbor_count++;
+            }
+        }
+
+        // Middle row.
+        if (gameArr[i-1] != undefined && gameArr[i-1].active) neighbor_count++;
+
+        if (gameArr[i+1] != undefined && gameArr[i+1].active) neighbor_count++;
+
+
+        // Lowest row.
+        if (gameArr[i+51] != undefined) {
+            if (gameArr[i+51].active) {
+                neighbor_count++;
+            }
+            if (gameArr[i+50].active) {
+                neighbor_count++;
+            }
+            if (gameArr[i+49].active) {
+                neighbor_count++;
+            }
+        }
+
+        // Check status of current cell for next iteration.
+        nextGameArr[i].active = livesOrDies(neighbor_count);
+    }
+    return nextGameArr;
+}
+
+function livesOrDies(neighbor_count) {
+    if (neighbor_count < 2) return false;
+    if (2 <= neighbor_count && neighbor_count <= 3) return true;
+    if (neighbor_count > 3) return false;
+}
+
