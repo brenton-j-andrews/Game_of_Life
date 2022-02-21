@@ -1,71 +1,33 @@
-// Select DOM elements
-let game_board = document.getElementById("game-board");
-let start_btn = document.getElementById("start-btn");
-let reset_btn = document.getElementById("reset-btn");
 
-// Canvas config.
-let canvas = document.querySelector("canvas");
-let ctx = canvas.getContext("2d");
-ctx.fillStyle = "blue";
-
-
-// ------------------------------------------------------  Create grid square objects, init and populate gameArr.
-class GridSquare {
-    constructor(x, y, dx, dy) {
-        this.x = Number(x);
-        this.y = Number(y);
-        this.dx = Number(dx);
-        this.dy = Number(dy);
-        this.active = false;
-    }
-    
-    draw = function() {
-        if (this.active) ctx.fillStyle = "black";
-        else ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.fillRect(this.x, this.y, this.dx, this.dy);
-        ctx.stroke();
-    }
-}
-
-let gameArr = [];
-
+// Create game grid, store in gameArr[]
 function CreateGameArr() {
-    let x_coord = .5;
-    let y_coord = .5;
-
+    let x_coord = 0;
+    let y_coord = 0;
     for (let y = 0; y < 50; y++) {
         for (let x = 0; x < 50; x++) {
             gameArr.push(new GridSquare(x_coord, y_coord, 15, 15));
             x_coord += 16;
         }
-
-        x_coord = .5;
+        x_coord = 0;
         y_coord += 16;
     }
 }
 
-// Add game grid elements to the canvas. 
-function drawCanvas() {
-    clearCanvas();
-    for (let i = 0; i < gameArr.length; i++) {
-        gameArr[i].draw();
-    }
-}
 
-CreateGameArr();
-drawCanvas();
 
-// ----------------------------------------------------------- Initial shape creation / cell activation on click.
 
+
+// Mouse click event object:
 let mouse = {
     x: undefined,
     y: undefined
 }
 
-canvas.addEventListener("click", cellActivation);
+let gameArr = []
 
-function cellActivation(event) {
+// Eventlistener function.
+function addColor(event) {
+    console.log(event.offsetX);
     mouse.x = event.offsetX;
     mouse.y = event.offsetY;
 
@@ -76,38 +38,45 @@ function cellActivation(event) {
 
                 if (!gameArr[i].active) {
                     gameArr[i].active = true;
+                    console.log(gameArr[i]);
                 }
 
                 else {
                     gameArr[i].active = false;
                 }
+
             }
         }
     }
-    
+    console.log(gameArr);
     drawCanvas();
 }
 
-function clearCanvas() {
-    const context = canvas.getContext("2d");
-    context.clearRect(0, 0, canvas.width, canvas.height);
+// Add game grid elements to the canvas.
+function drawCanvas() {
+    for (let i = 0; i < gameArr.length; i++) {
+        gameArr[i].draw();
+    }
 }
 
-// ------------------------------------------------------------- Game logic -> activates once "start" is pressed.
+// Window eventListener -> Used to create initial game structure with mouse clicks.
+canvas.addEventListener("click", addColor);
+drawCanvas();
+
+
+// ------------------------------------  Game logic and button functionality.
+
 start_btn.addEventListener("click", function() {
-    canvas.removeEventListener("click", cellActivation);
+    canvas.removeEventListener("click", addColor);
     gameArr = nextGameState(gameArr);
     drawCanvas();
+    console.log("done!");
 })
 
-// Returns transformed gameArr based on Game of Life Ruleset.
-function nextGameState(gameArr) {
-    
-    let nextGameArr= [
-        ...gameArr
-      ].map(i => ({ ...i}));
 
-    console.log(nextGameArr);
+function nextGameState(gameArr) {
+    console.log(gameArr);
+    let nextGameArr = gameArr;
     for (let i = 0; i < gameArr.length; i++) {
         let neighbor_count = 0;
 
@@ -144,28 +113,27 @@ function nextGameState(gameArr) {
         }
 
         // Check status of current cell for next iteration.
-        // if (i < 100) {
+        // if (i < 200) {
         //     console.log(`Cell ${i} neighbor count: ${neighbor_count}`);
-        //     console.log(`Cell ${i} active? ${gameArr[i].active}`);
         // }
+        
         nextGameArr[i].active = livesOrDies(gameArr[i].active, neighbor_count);
-        // if (i < 100) {
-        //     console.log(`After function cell ${i} active? ${gameArr[i].active}`);
-        // }
     }
     return nextGameArr;
 }
 
-// Game of Life ruleset.
 function livesOrDies(alive, neighbor_count) {
+
     // Rules for living cells.
     if (alive) {
         if (neighbor_count < 2) {
             return false;
         }
+
         if (2 <= neighbor_count && neighbor_count <= 3) {
             return true;
         }
+
         if (3 < neighbor_count) return false;
     }
 
@@ -174,4 +142,6 @@ function livesOrDies(alive, neighbor_count) {
         if (neighbor_count === 3) return true;
         else return false;
     }
+    
+    
 }
