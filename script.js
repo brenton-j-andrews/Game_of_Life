@@ -2,6 +2,7 @@
 let game_board = document.getElementById("game-board");
 let start_btn = document.getElementById("start-btn");
 let reset_btn = document.getElementById("reset-btn");
+let right_arrow_btn = document.getElementById("right-arrow");
 
 // Canvas config.
 let canvas = document.querySelector("canvas");
@@ -95,11 +96,46 @@ function cellActivation(event) {
 }
 
 // ------------------------------------------------------------- Game logic -> activates once "start" is pressed.
+let gameActive = false;
+let startIntervalID;
+
 start_btn.addEventListener("click", function() {
-    canvas.removeEventListener("click", cellActivation);
+    let speed_control_val = Number(document.getElementById("speed_control").value);
+    if (!gameActive) {
+        gameActive = true;
+        canvas.removeEventListener("click", cellActivation);
+        startIntervalID = setInterval(singleIteration, speed_control_val);
+        start_btn.textContent = "Stop";
+    }
+
+    else {
+        gameActive = false;
+        clearInterval(startIntervalID);
+        start_btn.textContent = "Start";
+    }
+})
+
+// Reset button -> Stop any animation and clean canvas;
+reset_btn.addEventListener("click", function() {
+    if (gameActive) {
+        clearInterval(startIntervalID);
+    }
+    gameArr = [];
+    CreateGameArr();
+    drawCanvas();
+    start_btn.textContent = "Start";
+    canvas.addEventListener("click", cellActivation);
+})
+
+// Right arrow button.
+right_arrow_btn.addEventListener("click", singleIteration)
+
+
+// Helper function that generates one iteration of the game.
+function singleIteration() {
     gameArr = nextGameState(gameArr);
     drawCanvas();
-})
+}
 
 // Returns transformed gameArr based on Game of Life Ruleset.
 function nextGameState(gameArr) {
@@ -108,7 +144,6 @@ function nextGameState(gameArr) {
         ...gameArr
       ].map(i => ({ ...i}));
 
-    console.log(nextGameArr);
     for (let i = 0; i < gameArr.length; i++) {
         let neighbor_count = 0;
 

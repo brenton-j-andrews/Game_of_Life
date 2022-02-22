@@ -1,3 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --background-light-grey: #E7E5E4;
+    --background-canvas: #D6D3D1;
+    --canvas-border-grey: lightslategrey;
+    --button-background-grey: 
+
+}
+
 .content-wrapper {
     display: flex;
     flex-direction: column;
@@ -7,27 +20,68 @@
     padding: 50px;
 }
 
-/* ----------------------------------- game board styling -----------------------------------  */
+/* ----------------------------------- game board styling --------------------------------------  */
 .game-board {
-    border: lightslategrey solid 5px;
+    border: var(--canvas-border-grey) solid 5px;
     width: 800px;
     height: 800px;
     background-color: white;
 }
 
 canvas {
-    background-color: lightgrey;
+    background-color: var(--background-canvas);
 }
 
 /* ----------------------------------- game controls styling -----------------------------------  */
 .game-controls {
     display: flex;
+    flex-direction: column;
+
     background-color: lime;
+    border-radius: 25px;
     margin: 25px;
     padding: 25px;
     gap:10px;
 }
 
-#grid-count {
-    width: 50px;
+.game-controls-upper,
+.game-controls-lower {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    font-size: 20px;
+    width: 200px;
+    padding: 5px 0px 5px 0px;
+    margin: 5px;
+
+    border: 3px solid var(--canvas-border-grey);
+    border-radius: 15px;
+}
+
+.speed-control-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* ----------------------------------- footer styling ------------------------------------------  */
+footer {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+
+    background-color: #669fb2;
+    color: white;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover {
+    color: red;
 }
