@@ -53,6 +53,12 @@ function drawCanvas() {
     }
 }
 
+function clearCanvas() {
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+
 CreateGameArr();
 drawCanvas();
 
@@ -86,11 +92,6 @@ function cellActivation(event) {
     }
     
     drawCanvas();
-}
-
-function clearCanvas() {
-    const context = canvas.getContext("2d");
-    context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // ------------------------------------------------------------- Game logic -> activates once "start" is pressed.
@@ -143,21 +144,15 @@ function nextGameState(gameArr) {
             }
         }
 
-        // Check status of current cell for next iteration.
-        // if (i < 100) {
-        //     console.log(`Cell ${i} neighbor count: ${neighbor_count}`);
-        //     console.log(`Cell ${i} active? ${gameArr[i].active}`);
-        // }
         nextGameArr[i].active = livesOrDies(gameArr[i].active, neighbor_count);
-        // if (i < 100) {
-        //     console.log(`After function cell ${i} active? ${gameArr[i].active}`);
-        // }
     }
+
     return nextGameArr;
 }
 
 // Game of Life ruleset.
 function livesOrDies(alive, neighbor_count) {
+
     // Rules for living cells.
     if (alive) {
         if (neighbor_count < 2) {
@@ -169,7 +164,7 @@ function livesOrDies(alive, neighbor_count) {
         if (3 < neighbor_count) return false;
     }
 
-    // If dead cell.
+    // Dead cell rules.
     if (!alive) {
         if (neighbor_count === 3) return true;
         else return false;
