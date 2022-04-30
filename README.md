@@ -1,2 +1,2 @@
 # Game_of_Life
-An attempt at recreating John Conway's "Game of Life" with vanilla Javascript.
+A recreation of John Conway's "Game of Life" using vanilla Javascript, HTML and CSS.
